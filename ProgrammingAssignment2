@@ -1,0 +1,33 @@
+## Estas funciones permiten almacenar en caché la inversa de una matriz 
+## para evitar cálculos repetitivos costosos.
+
+## 1. Esta función crea un objeto "matriz" especial que puede guardar su inversa en caché.
+makeCacheMatrix <- function(x = matrix()) {
+        inv <- NULL
+        set <- function(y) {
+                x <<- y
+                inv <<- NULL
+        }
+        get <- function() x
+        setInverse <- function(inverse) inv <<- inverse
+        getInverse <- function() inv
+        list(set = set, get = get,
+             setInverse = setInverse,
+             getInverse = getInverse)
+}
+
+## 2. Esta función calcula la inversa de la "matriz" devuelta por makeCacheMatrix.
+## Si la inversa ya ha sido calculada (y la matriz no ha cambiado), 
+## entonces la función recupera la inversa de la caché.
+cacheSolve <- function(x, ...) {
+        ## Devuelve una matriz que es la inversa de 'x'
+        inv <- x$getInverse()
+        if(!is.null(inv)) {
+                message("getting cached data")
+                return(inv)
+        }
+        data <- x$get()
+        inv <- solve(data, ...)
+        x$setInverse(inv)
+        inv
+}
